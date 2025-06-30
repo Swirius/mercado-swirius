@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title
+	th:text="${producto.id == null ? 'Nuevo Producto' : 'Editar Producto'}">Producto</title>
+<link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+	<header>
+		<h1
+			th:text="${producto.id == null ? 'Nuevo Producto' : 'Editar Producto'}">Producto</h1>
+		<nav>
+			<a th:href="@{/}">Inicio</a>
+		</nav>
+	</header>
+	<div class="container">
+		<form th:action="@{/productos/guardar}" th:object="${producto}"
+			method="post" enctype="multipart/form-data">
+			<input type="hidden" th:field="*{id}" /> <label>Nombre:</label> <input
+				type="text" th:field="*{nombre}" required /> <label>Descripción:</label>
+			<input type="text" th:field="*{descripcion}" required /> <label>Precio:</label>
+			<input type="number" th:field="*{precio}" step="0.01" required /> <label>Imagen:</label>
+			<input type="file" name="file" /> 
+			<label for="stock">Stock:</label>
+			<input type="number" id="stock" name="stock" th:field="*{stock}"
+				min="0" required />
+
+			<div th:if="${producto.imagen != null}">
+				<p>Imagen actual:</p>
+				<img th:src="@{'/uploads/' + ${producto.imagen}}" width="200" />
+			</div>
+
+			<button type="submit">Guardar</button>
+		</form>
+	</div>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Inicio</title>
+<link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+	<header>
+		<h1>Mercado Swirius</h1>
+		<nav>
+			<a th:href="@{/}">Inicio</a>
+			<a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/carrito}">🛒 Ver Carrito</a>
+			<a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/logout}">Logout</a>
+			<a th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/login}">Login</a>
+			<a th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/registro}">Registro</a>
+		</nav>
+	</header>
+
+	<div class="container">
+		<div th:if="${#authorization.expression('isAuthenticated()')}">
+			<p>
+				Bienvenido, <strong th:text="${#authentication.principal.nombre}">Usuario</strong>
+				| Rol: <strong th:text="${#authentication.principal.rol}">Rol</strong>
+			</p>
+
+			<a th:if="${#authentication.principal.rol == 'ADMIN'}" th:href="@{/productos/nuevo}">➕ Nuevo Producto</a>
+		</div>
+
+		<h2>Productos</h2>
+		<div th:each="prod : ${productos}">
+			<h3 th:text="${prod.nombre}"></h3>
+			<img th:src="@{'/uploads/' + ${prod.imagen}}" width="200" />
+			<p th:text="${prod.descripcion}"></p>
+			<p><strong>$</strong><span th:text="${prod.precio}"></span></p>
+
+			<div th:if="${#authentication.principal.rol == 'ADMIN'}">
+				<a th:href="@{'/productos/editar/' + ${prod.id}}">✏️ Editar</a> |
+				<a th:href="@{'/productos/eliminar/' + ${prod.id}}"
+				   onclick="return confirm('¿Seguro que querés eliminar este producto?')">🗑️ Eliminar</a>
+			</div>
+
+			<a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{'/carrito/agregar/' + ${prod.id}}">
+				🛒 Agregar al carrito
+			</a>
+			<hr />
+		</div>
+
+		<div th:if="${#authorization.expression('isAuthenticated()')}">
+			<a th:href="@{/historial}">📜 Mis Compras</a>
+		</div>
+	</div>
+</body>
+</html>
