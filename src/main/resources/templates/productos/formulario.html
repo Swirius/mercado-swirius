@@ -14,21 +14,45 @@
 			<a th:href="@{/}">Inicio</a>
 		</nav>
 	</header>
+
 	<div class="container">
 		<form th:action="@{/productos/guardar}" th:object="${producto}"
 			method="post" enctype="multipart/form-data">
+
 			<input type="hidden" th:field="*{id}" /> <label>Nombre:</label> <input
-				type="text" th:field="*{nombre}" required /> <label>Descripción:</label>
-			<input type="text" th:field="*{descripcion}" required /> <label>Precio:</label>
-			<input type="number" th:field="*{precio}" step="0.01" required /> <label>Imagen:</label>
-			<input type="file" name="file" /> 
-			<label for="stock">Stock:</label>
-			<input type="number" id="stock" name="stock" th:field="*{stock}"
-				min="0" required />
+				type="text" th:field="*{nombre}" required />
+			<div th:if="${#fields.hasErrors('nombre')}" class="error">
+				<p th:errors="*{nombre}"></p>
+			</div>
+
+			<label>Descripción:</label> <input type="text"
+				th:field="*{descripcion}" required />
+			<div th:if="${#fields.hasErrors('descripcion')}" class="error">
+				<p th:errors="*{descripcion}"></p>
+			</div>
+
+			<label>Precio:</label> <input type="number" th:field="*{precio}"
+				step="0.01" required />
+			<div th:if="${#fields.hasErrors('precio')}" class="error">
+				<p th:errors="*{precio}"></p>
+			</div>
+
+			<label>Categoría:</label> <input type="text" th:field="*{categoria}" required />
+			<div th:if="${#fields.hasErrors('categoria')}" class="error">
+    			<p th:errors="*{categoria}"></p>
+			</div>
+			
+			<label>Imagen:</label> <input type="file" name="file" /> <label
+				for="stock">Stock:</label> <input type="number" id="stock"
+				name="stock" th:field="*{stock}" min="0" required />
+			<div th:if="${#fields.hasErrors('stock')}" class="error">
+				<p th:errors="*{stock}"></p>
+			</div>
 
 			<div th:if="${producto.imagen != null}">
 				<p>Imagen actual:</p>
-				<img th:src="@{'/uploads/' + ${producto.imagen}}" width="200" />
+				<img th:src="@{'/uploads/' + ${producto.imagen}}" width="200"
+					alt="Imagen actual del producto" />
 			</div>
 
 			<button type="submit">Guardar</button>

@@ -1,67 +1,88 @@
 package com.swirius.mercado.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 public class Producto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	private String nombre;
+    @NotBlank(message = "El nombre es obligatorio")
+    private String nombre;
 
-	@Column(length = 1000)
-	private String descripcion;
+    @NotBlank(message = "La categoría es obligatoria")
+    private String categoria;
 
-	private Double precio;
+    @NotBlank(message = "La descripción es obligatoria")
+    @Size(max = 1000, message = "La descripción no puede exceder los 1000 caracteres")
+    private String descripcion;
 
-	private String imagen;
+    @NotNull(message = "El precio es obligatorio")
+    @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor que 0")
+    private Double precio;
 
-	private int stock;
+    private String imagen;
 
-	// Getters y Setters
-	public Long getId() {
-		return id;
-	}
+    @Min(value = 0, message = "El stock no puede ser negativo")
+    private int stock;
 
-	public String getNombre() {
-		return nombre;
-	}
+    // Getters y Setters (incluyendo setId)
+    public Long getId() {
+        return id;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getDescripcion() {
-		return descripcion;
-	}
+    public String getNombre() {
+        return nombre;
+    }
 
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-	public Double getPrecio() {
-		return precio;
-	}
+    public String getCategoria() {
+        return categoria;
+    }
 
-	public void setPrecio(Double precio) {
-		this.precio = precio;
-	}
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
 
-	public String getImagen() {
-		return imagen;
-	}
+    public String getDescripcion() {
+        return descripcion;
+    }
 
-	public void setImagen(String imagen) {
-		this.imagen = imagen;
-	}
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
 
-	public int getStock() {
-		return stock;
-	}
+    public Double getPrecio() {
+        return precio;
+    }
 
-	public void setStock(int stock) {
-		this.stock = stock;
-	}
+    public void setPrecio(Double precio) {
+        this.precio = precio;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
 }

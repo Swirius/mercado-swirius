@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${producto.nombre}">Detalle Producto</title>
+<link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+	<header>
+		<h1 th:text="${producto.nombre}">Nombre</h1>
+		<nav>
+			<a th:href="@{/}">Inicio</a>
+		</nav>
+	</header>
+
+	<div class="container">
+		<div>
+			<img th:src="@{'/uploads/' + ${producto.imagen}}" width="300"
+				alt="Imagen del producto" />
+			<p><strong>Descripción:</strong> <span th:text="${producto.descripcion}"></span></p>
+			<p><strong>Precio:</strong> $<span th:text="${producto.precio}"></span></p>
+			<p><strong>Categoría:</strong> <span th:text="${prod.categoria}"></span></p>
+			
+			<p><strong>Stock:</strong>
+			<span th:text="${producto.stock}"></span>
+			</p>
+		</div>
+
+		<div th:if="${#authorization.expression('isAuthenticated()')}">
+			<div th:if="${producto.stock > 0}">
+				<a th:href="@{'/carrito/agregar/' + ${producto.id}}">🛒 Agregar al carrito</a>
+			</div>
+			<div th:if="${producto.stock == 0}">
+				<p style="color: red;">❌ Producto sin stock</p>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>
