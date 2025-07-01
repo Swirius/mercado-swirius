@@ -30,7 +30,6 @@ public class Usuario implements UserDetails {
 	@Column(nullable = false)
 	private String rol = "USER";
 
-	// Getters y Setters
 	public String getNombre() {
 		return nombre;
 	}
