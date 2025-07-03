@@ -53,7 +53,9 @@
                 </div>
 
                 <p th:text="${prod.descripcion}">Descripción</p>
-                <p><strong>$</strong><span th:text="${prod.precio}">Precio</span></p>
+                <p><strong>$</strong><span th:text="${prod.precio}"></span></p>
+				<p><strong>Stock:</strong> <span th:text="${prod.stock}"></span></p>
+
                 <p><strong>Categoría:</strong> <span th:text="${prod.categoria}"></span></p>
                 
 

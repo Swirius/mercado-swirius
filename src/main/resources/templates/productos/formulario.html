@@ -19,30 +19,33 @@
 		<form th:action="@{/productos/guardar}" th:object="${producto}"
 			method="post" enctype="multipart/form-data">
 
-			<input type="hidden" th:field="*{id}" /> <label>Nombre:</label> <input
-				type="text" th:field="*{nombre}" required />
+			<input type="hidden" th:field="*{id}" /> <label>Nombre:</label> 
+			<input type="text" th:field="*{nombre}" required />
 			<div th:if="${#fields.hasErrors('nombre')}" class="error">
 				<p th:errors="*{nombre}"></p>
 			</div>
 
-			<label>Descripción:</label> <input type="text"
-				th:field="*{descripcion}" required />
+			<label>Descripción:</label> 
+			<input type="text" th:field="*{descripcion}" required />
 			<div th:if="${#fields.hasErrors('descripcion')}" class="error">
 				<p th:errors="*{descripcion}"></p>
 			</div>
 
-			<label>Precio:</label> <input type="number" th:field="*{precio}"
+			<label>Precio:</label> 
+			<input type="number" th:field="*{precio}"
 				step="0.01" required />
 			<div th:if="${#fields.hasErrors('precio')}" class="error">
 				<p th:errors="*{precio}"></p>
 			</div>
 
-			<label>Categoría:</label> <input type="text" th:field="*{categoria}" required />
+			<label>Categoría:</label> 
+			<input type="text" th:field="*{categoria}" required />
 			<div th:if="${#fields.hasErrors('categoria')}" class="error">
     			<p th:errors="*{categoria}"></p>
 			</div>
 			
-			<label>Imagen:</label> <input type="file" name="file" /> <label
+			<label>Imagen:</label> 
+			<input type="file" name="file" /> <label
 				for="stock">Stock:</label> <input type="number" id="stock"
 				name="stock" th:field="*{stock}" min="0" required />
 			<div th:if="${#fields.hasErrors('stock')}" class="error">

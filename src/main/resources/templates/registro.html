@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Registro</title>
-	<link rel="stylesheet" th:href="@{/css/estilo.css}">
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
 </head>
 <body>
     <header>
@@ -16,15 +16,24 @@
     <div class="container">
         <form th:action="@{/registro}" th:object="${usuario}" method="post">
             <label>Nombre:</label>
-            <input type="text" th:field="*{nombre}" required/>
+            <input type="text" th:field="*{nombre}" required />
+            <div th:if="${#fields.hasErrors('nombre')}" class="error">
+                <p th:errors="*{nombre}"></p>
+            </div>
 
             <label>Email:</label>
-            <input type="email" th:field="*{email}" required/>
+            <input type="email" th:field="*{email}" required />
+            <div th:if="${#fields.hasErrors('email')}" class="error">
+                <p th:errors="*{email}"></p>
+            </div>
 
             <label>Contraseña:</label>
-            <input type="password" th:field="*{password}" required/>
+            <input type="password" th:field="*{password}" required />
+            <div th:if="${#fields.hasErrors('password')}" class="error">
+                <p th:errors="*{password}"></p>
+            </div>
 
-            <input type="hidden" th:field="*{rol}" value="USER"/>
+            <input type="hidden" th:field="*{rol}" value="USER" />
 
             <button type="submit">Registrarse</button>
         </form>

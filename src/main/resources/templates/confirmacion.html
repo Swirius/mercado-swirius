@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Compra Realizada</title>
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+    <header>
+        <h1>¡Gracias por tu compra!</h1>
+        <nav>
+            <a th:href="@{/}">Inicio</a>
+            <a th:href="@{/historial}">📜 Ver historial</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <p>Número de orden: <strong th:text="${compra.id}"></strong></p>
+        <p>Fecha: <strong th:text="${#dates.format(compra.fecha, 'dd/MM/yyyy HH:mm')}"></strong></p>
+        <p>Total: <strong>$<span th:text="${compra.total}"></span></strong></p>
+
+        <h3>Productos:</h3>
+        <ul>
+            <li th:each="detalle : ${compra.detalleCompraList}">
+                <span th:text="${detalle.producto.nombre}"></span> -
+                Cantidad: <span th:text="${detalle.cantidad}"></span> -
+                Precio: $<span th:text="${detalle.precioUnitario}"></span>
+            </li>
+        </ul>
+    </div>
+</body>
+</html>

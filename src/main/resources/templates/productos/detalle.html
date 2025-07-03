@@ -19,11 +19,8 @@
 				alt="Imagen del producto" />
 			<p><strong>Descripción:</strong> <span th:text="${producto.descripcion}"></span></p>
 			<p><strong>Precio:</strong> $<span th:text="${producto.precio}"></span></p>
-			<p><strong>Categoría:</strong> <span th:text="${prod.categoria}"></span></p>
-			
-			<p><strong>Stock:</strong>
-			<span th:text="${producto.stock}"></span>
-			</p>
+			<p><strong>Categoría:</strong> <span th:text="${producto.categoria}"></span></p>
+			<p><strong>Stock:</strong> <span th:text="${producto.stock}"></span></p>
 		</div>
 
 		<div th:if="${#authorization.expression('isAuthenticated()')}">
@@ -34,7 +31,6 @@
 				<p style="color: red;">❌ Producto sin stock</p>
 			</div>
 		</div>
-
 	</div>
 </body>
 </html>

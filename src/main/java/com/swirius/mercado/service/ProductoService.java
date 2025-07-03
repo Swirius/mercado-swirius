@@ -29,7 +29,7 @@ public class ProductoService {
     public Producto buscarPorId(Long id) {
         return productoRepository.findById(id).orElse(null);
     }
-    
+
     public List<Producto> buscarAvanzado(String nombre, Double min, Double max, String categoria) {
         List<Producto> base = productoRepository.findAll();
 
@@ -44,7 +44,6 @@ public class ProductoService {
     public void eliminarPorId(Long id) {
         Optional<Producto> productoOpt = productoRepository.findById(id);
         productoOpt.ifPresent(producto -> {
-            // Eliminar archivo si existe
             if (producto.getImagen() != null) {
                 Path ruta = Paths.get("src/main/resources/static/uploads/" + producto.getImagen());
                 try {

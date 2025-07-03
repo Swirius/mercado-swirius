@@ -6,33 +6,36 @@
 <link rel="stylesheet" th:href="@{/css/estilo.css}">
 </head>
 <body>
-	<header>
-		<h1>Mis Compras</h1>
-		<nav>
-			<a th:href="@{/}">Inicio</a>
-		</nav>
-	</header>
+    <header>
+        <h1>Mis Compras</h1>
+        <nav>
+            <a th:href="@{/}">Inicio</a>
+        </nav>
+    </header>
 
-	<div class="container">
-		<div th:if="${#lists.isEmpty(ordenes)}">
-			<p>No tenés compras registradas.</p>
-		</div>
+    <div class="container">
+        <div th:if="${#lists.isEmpty(ordenes)}">
+            <p>No tenés compras registradas.</p>
+        </div>
 
-		<div th:each="orden : ${ordenes}" class="orden">
-			<h3>Orden #[[${orden.id}]] - [[${#dates.format(orden.fecha,
-				'dd/MM/yyyy HH:mm')}]]</h3>
-			<ul>
-				<li th:each="item : ${orden.items}"><strong
-					th:text="${item.producto.nombre}"></strong> - Cantidad: <span
-					th:text="${item.cantidad}"></span> - Precio unitario: $<span
-					th:text="${item.precio}"></span> - Subtotal: $<span
-					th:text="${item.cantidad * item.precio}"></span></li>
-			</ul>
-			<p>
-				<strong>Total:</strong> $<span th:text="${orden.total}"></span>
-			</p>
-			<hr>
-		</div>
-	</div>
+        <div th:each="orden : ${ordenes}" class="orden">
+            <h3>
+                Orden #<span th:text="${orden.id}"></span> -
+                <span th:text="${#dates.format(orden.fecha, 'dd/MM/yyyy HH:mm')}"></span>
+            </h3>
+
+            <ul>
+                <li th:each="item : ${orden.detalleCompraList}">
+                    <strong th:text="${item.producto.nombre}"></strong>
+                    - Cantidad: <span th:text="${item.cantidad}"></span>
+                    - Precio unitario: $<span th:text="${item.precioUnitario}"></span>
+                    - Subtotal: $<span th:text="${item.cantidad * item.precioUnitario}"></span>
+                </li>
+            </ul>
+
+            <p><strong>Total:</strong> $<span th:text="${orden.total}"></span></p>
+            <hr>
+        </div>
+    </div>
 </body>
 </html>
