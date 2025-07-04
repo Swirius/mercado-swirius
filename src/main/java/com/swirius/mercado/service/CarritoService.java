@@ -5,6 +5,7 @@ import com.swirius.mercado.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -34,11 +35,17 @@ public class CarritoService {
 		// Ver si ya existe el ítem
 		List<ItemCarrito> items = itemRepo.findByCarrito(carrito);
 		for (ItemCarrito item : items) {
-			if (item.getProducto().getId().equals(productoId)) {
-				item.setCantidad(item.getCantidad() + cantidad);
-				itemRepo.save(item);
-				return;
-			}
+		    if (item.getProducto().getId().equals(productoId)) {
+		        int nuevaCantidad = item.getCantidad() + cantidad;
+
+		        if (nuevaCantidad > producto.getStock()) {
+		            nuevaCantidad = producto.getStock(); // no superar stock
+		        }
+
+		        item.setCantidad(nuevaCantidad);
+		        itemRepo.save(item);
+		        return;
+		    }
 		}
 
 		if (producto.getStock() < cantidad) {
@@ -60,8 +67,10 @@ public class CarritoService {
 		return itemRepo.findByCarrito(carrito);
 	}
 
-	public double calcularTotal(Usuario usuario) {
-		return obtenerItems(usuario).stream().mapToDouble(item -> item.getCantidad() * item.getPrecio()).sum();
+	public BigDecimal calcularTotal(Usuario usuario) {
+	    return obtenerItems(usuario).stream()
+	        .map(item -> item.getPrecio().multiply(BigDecimal.valueOf(item.getCantidad())))
+	        .reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
 	public void eliminarItem(Long itemId) {

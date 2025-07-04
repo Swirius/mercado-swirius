@@ -1,6 +1,8 @@
 package com.swirius.mercado.model;
 
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class Orden {
 
 	private LocalDateTime fecha;
 
-	private double total;
+	private BigDecimal total;
 
 	@ManyToOne
 	private Usuario usuario;
@@ -38,12 +40,12 @@ public class Orden {
 		this.fecha = fecha;
 	}
 
-	public double getTotal() {
+	public BigDecimal getTotal() {
 		return total;
 	}
 
-	public void setTotal(double total) {
-		this.total = total;
+	public void setTotal(BigDecimal bigDecimal) {
+		this.total = bigDecimal;
 	}
 
 	public Usuario getUsuario() {

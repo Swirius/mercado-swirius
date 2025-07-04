@@ -1,65 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title
-	th:text="${producto.id == null ? 'Nuevo Producto' : 'Editar Producto'}">Producto</title>
-<link rel="stylesheet" th:href="@{/css/estilo.css}">
+    <meta charset="UTF-8">
+    <title>Formulario Producto</title>
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
 </head>
 <body>
-	<header>
-		<h1
-			th:text="${producto.id == null ? 'Nuevo Producto' : 'Editar Producto'}">Producto</h1>
-		<nav>
-			<a th:href="@{/}">Inicio</a>
-		</nav>
-	</header>
+    <header>
+        <h1 th:text="${producto.id != null} ? 'Editar Producto' : 'Nuevo Producto'"></h1>
+        <nav>
+            <a th:href="@{/}">🏠 Inicio</a>
+            <a th:href="@{/productos}">📦 Lista de Productos</a>
+        </nav>
+    </header>
 
-	<div class="container">
-		<form th:action="@{/productos/guardar}" th:object="${producto}"
-			method="post" enctype="multipart/form-data">
+    <div class="container">
+        <form th:action="@{/productos/guardar}" th:object="${producto}" method="post" enctype="multipart/form-data" novalidate>
+            <input type="hidden" th:field="*{id}" />
 
-			<input type="hidden" th:field="*{id}" /> <label>Nombre:</label> 
-			<input type="text" th:field="*{nombre}" required />
-			<div th:if="${#fields.hasErrors('nombre')}" class="error">
-				<p th:errors="*{nombre}"></p>
-			</div>
+            <!-- Errores globales -->
+            <div th:replace="~{fragmentos/errores :: erroresGlobales}"></div>
 
-			<label>Descripción:</label> 
-			<input type="text" th:field="*{descripcion}" required />
-			<div th:if="${#fields.hasErrors('descripcion')}" class="error">
-				<p th:errors="*{descripcion}"></p>
-			</div>
+            <!-- Nombre -->
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" th:field="*{nombre}" placeholder="Ej: Teclado Mecánico" />
+            <div th:replace="~{fragmentos/errores :: errores('nombre')}"></div>
 
-			<label>Precio:</label> 
-			<input type="number" th:field="*{precio}"
-				step="0.01" required />
-			<div th:if="${#fields.hasErrors('precio')}" class="error">
-				<p th:errors="*{precio}"></p>
-			</div>
+            <!-- Descripción -->
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" th:field="*{descripcion}" placeholder="Breve descripción..."></textarea>
+            <div th:replace="~{fragmentos/errores :: errores('descripcion')}"></div>
 
-			<label>Categoría:</label> 
-			<input type="text" th:field="*{categoria}" required />
-			<div th:if="${#fields.hasErrors('categoria')}" class="error">
-    			<p th:errors="*{categoria}"></p>
-			</div>
-			
-			<label>Imagen:</label> 
-			<input type="file" name="file" /> <label
-				for="stock">Stock:</label> <input type="number" id="stock"
-				name="stock" th:field="*{stock}" min="0" required />
-			<div th:if="${#fields.hasErrors('stock')}" class="error">
-				<p th:errors="*{stock}"></p>
-			</div>
+            <!-- Precio -->
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" th:field="*{precio}" step="0.01" placeholder="0.00" min="0" />
+            <div th:replace="~{fragmentos/errores :: errores('precio')}"></div>
 
-			<div th:if="${producto.imagen != null}">
-				<p>Imagen actual:</p>
-				<img th:src="@{'/uploads/' + ${producto.imagen}}" width="200"
-					alt="Imagen actual del producto" />
-			</div>
+            <!-- Stock -->
+            <label for="stock">Stock:</label>
+            <input type="number" id="stock" th:field="*{stock}" th:value="*{stock} ?: 0" placeholder="Cantidad disponible" min="0" />
+            <div th:replace="~{fragmentos/errores :: errores('stock')}"></div>
 
-			<button type="submit">Guardar</button>
-		</form>
-	</div>
+            <!-- Categoría -->
+            <label for="categoria">Categoría:</label>
+            <select id="categoria" th:field="*{categoria}">
+                <option value="">Seleccione una categoría</option>
+                <option value="Tecnología">Tecnología</option>
+                <option value="Hogar">Hogar</option>
+                <option value="Moda">Moda</option>
+                <option value="Deportes">Deportes</option>
+                <option value="Otros">Otros</option>
+            </select>
+            <div th:replace="~{fragmentos/errores :: errores('categoria')}"></div>
+
+            <!-- Imagen -->
+            <label for="imagen">Imagen:</label>
+            <input type="file" id="imagen" name="file" />
+            <div th:if="${producto.imagen != null}">
+                <p>Imagen actual:</p>
+                <img th:src="@{'/uploads/' + ${producto.imagen}}" width="150" />
+            </div>
+
+            <!-- Botón -->
+            <button type="submit" th:text="${producto.id != null} ? 'Actualizar' : 'Guardar'">Guardar</button>
+        </form>
+    </div>
 </body>
 </html>

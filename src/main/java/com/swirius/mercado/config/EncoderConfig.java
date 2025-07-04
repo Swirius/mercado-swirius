@@ -1,4 +1,3 @@
-// com.swirius.mercado.config.EncoderConfig.java
 package com.swirius.mercado.config;
 
 import org.springframework.context.annotation.Bean;
@@ -8,9 +7,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class EncoderConfig {
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 }

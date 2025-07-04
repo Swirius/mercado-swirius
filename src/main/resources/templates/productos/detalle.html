@@ -1,36 +1,53 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title th:text="${producto.nombre}">Detalle Producto</title>
-<link rel="stylesheet" th:href="@{/css/estilo.css}">
+    <meta charset="UTF-8">
+    <title th:text="${producto.nombre}">Detalle Producto</title>
+    <link rel="stylesheet" th:href="@{/css/estilo.css}">
 </head>
 <body>
-	<header>
-		<h1 th:text="${producto.nombre}">Nombre</h1>
-		<nav>
-			<a th:href="@{/}">Inicio</a>
-		</nav>
-	</header>
+    <header>
+        <h1>Detalle del Producto</h1>
+        <nav>
+            <a th:href="@{/}">🏠 Inicio</a>
+            <a th:href="@{/productos}">📦 Volver a Productos</a>
+        </nav>
+    </header>
 
-	<div class="container">
-		<div>
-			<img th:src="@{'/uploads/' + ${producto.imagen}}" width="300"
-				alt="Imagen del producto" />
-			<p><strong>Descripción:</strong> <span th:text="${producto.descripcion}"></span></p>
-			<p><strong>Precio:</strong> $<span th:text="${producto.precio}"></span></p>
-			<p><strong>Categoría:</strong> <span th:text="${producto.categoria}"></span></p>
-			<p><strong>Stock:</strong> <span th:text="${producto.stock}"></span></p>
-		</div>
+    <div class="container detalle-producto">
+        <div class="imagen-producto">
+            <img th:src="@{'/uploads/' + ${producto.imagen}}" width="350" alt="Imagen del producto" />
+        </div>
 
-		<div th:if="${#authorization.expression('isAuthenticated()')}">
-			<div th:if="${producto.stock > 0}">
-				<a th:href="@{'/carrito/agregar/' + ${producto.id}}">🛒 Agregar al carrito</a>
-			</div>
-			<div th:if="${producto.stock == 0}">
-				<p style="color: red;">❌ Producto sin stock</p>
-			</div>
-		</div>
-	</div>
+        <div class="info-producto">
+            <h2 th:text="${producto.nombre}">Nombre</h2>
+            <p><strong>Descripción:</strong> <span th:text="${producto.descripcion}">Descripción</span></p>
+            <p><strong>Precio:</strong> $<span th:text="${producto.precio}">0.00</span></p>
+            <p><strong>Categoría:</strong> <span th:text="${producto.categoria}">Sin categoría</span></p>
+            <p><strong>Stock:</strong> <span th:text="${producto.stock}">0</span></p>
+
+            <!-- Opciones solo para ADMIN -->
+            <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                <a th:href="@{'/productos/editar/' + ${producto.id}}">✏️ Editar</a> |
+                <a th:href="@{'/productos/eliminar/' + ${producto.id}}"
+                   onclick="return confirm('¿Eliminar este producto?')">🗑️ Eliminar</a>
+            </div>
+
+            <!-- Agregar al carrito si está autenticado -->
+            <div th:if="${#authorization.expression('isAuthenticated()')}">
+                <div th:if="${producto.stock > 0}">
+                    <form method="post" th:action="@{'/carrito/agregar/' + ${producto.id}}">
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" id="cantidad" name="cantidad" min="1" 
+                               th:attr="max=${producto.stock}" value="1" required />
+                        <button type="submit">🛒 Agregar al carrito</button>
+                    </form>
+                </div>
+                <div th:if="${producto.stock == 0}">
+                    <p style="color: red;">❌ Sin stock disponible</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

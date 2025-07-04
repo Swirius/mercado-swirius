@@ -1,5 +1,7 @@
 package com.swirius.mercado.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -16,7 +18,7 @@ public class ItemCarrito {
 	private Producto producto;
 
 	private int cantidad;
-	private double precio;
+	private BigDecimal precio;
 
 	// Getters y Setters
 	public Long getId() {
@@ -51,12 +53,12 @@ public class ItemCarrito {
 		this.cantidad = cantidad;
 	}
 
-	public double getPrecio() {
+	public BigDecimal getPrecio() {
 		return precio;
 	}
 
-	public void setPrecio(double precio) {
-		this.precio = precio;
+	public void setPrecio(BigDecimal bigDecimal) {
+		this.precio = bigDecimal;
 	}
 
 }

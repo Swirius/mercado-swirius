@@ -25,8 +25,10 @@ public class ProductoController {
     private final String UPLOAD_DIR = "src/main/resources/static/uploads/";
 
     @GetMapping("/nuevo")
-    public String formulario(Model model) {
-        model.addAttribute("producto", new Producto());
+    public String nuevoProducto(Model model) {
+        Producto producto = new Producto();
+        producto.setStock(0);
+        model.addAttribute("producto", producto);
         return "productos/formulario";
     }
 
@@ -36,46 +38,62 @@ public class ProductoController {
         if (producto == null) {
             return "redirect:/";
         }
+
+        if (producto.getStock() == null) {
+            producto.setStock(0);
+        }
+
         model.addAttribute("producto", producto);
         return "productos/formulario";
     }
 
+
     @PostMapping("/guardar")
-    public String guardar(@Valid @ModelAttribute Producto producto, BindingResult result,
+    public String guardar(@Valid @ModelAttribute("producto") Producto producto, BindingResult result,
                           @RequestParam("file") MultipartFile file, Model model) throws IOException {
 
-        if (result.hasErrors()) {
-            model.addAttribute("producto", producto);
-            return "productos/formulario";
+        // Validación global ficticia de ejemplo: nombre duplicado
+        if (producto.getNombre() != null && service.existePorNombre(producto.getNombre(), producto.getId())) {
+            result.reject("error.nombreDuplicado", "Ya existe un producto con ese nombre.");
         }
 
+        // Validación de tipo de imagen
         if (!file.isEmpty()) {
             String originalFilename = file.getOriginalFilename();
             String extension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
 
             if (!extension.matches("jpg|jpeg|png|gif|webp")) {
-                throw new IOException("Formato de imagen no permitido: " + extension);
+                result.reject("error.formatoImagen", "Formato de imagen no permitido: " + extension);
             }
+        }
 
-            String nombreArchivo = System.currentTimeMillis() + "_" + Math.abs(originalFilename.hashCode()) + "." + extension;
+        // Si hay errores, volver al formulario
+        if (result.hasErrors()) {
+            model.addAttribute("producto", producto);
+            return "productos/formulario";
+        }
+
+        // Guardado de la imagen
+        if (!file.isEmpty()) {
+            String nombreArchivo = System.currentTimeMillis() + "_" + Math.abs(file.getOriginalFilename().hashCode()) + "." +
+                    file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
             Path ruta = Paths.get(UPLOAD_DIR + nombreArchivo);
 
             Files.createDirectories(Paths.get(UPLOAD_DIR));
             file.transferTo(ruta);
 
             producto.setImagen(nombreArchivo);
-        } else {
-            if (producto.getId() != null) {
-                Producto existente = service.buscarPorId(producto.getId());
-                if (existente != null) {
-                    producto.setImagen(existente.getImagen());
-                }
+        } else if (producto.getId() != null) {
+            Producto existente = service.buscarPorId(producto.getId());
+            if (existente != null) {
+                producto.setImagen(existente.getImagen());
             }
         }
 
         service.guardar(producto);
         return "redirect:/";
     }
+
 
     @GetMapping("/detalle/{id}")
     public String detalle(@PathVariable Long id, Model model) {

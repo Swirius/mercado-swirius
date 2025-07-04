@@ -1,5 +1,7 @@
 package com.swirius.mercado.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -11,23 +13,30 @@ public class Producto {
     private Long id;
 
     @NotBlank(message = "El nombre es obligatorio")
+    @Size(max = 100, message = "Máximo 100 caracteres")
+    @Column(nullable = false)
     private String nombre;
-
-    @NotBlank(message = "La categoría es obligatoria")
-    private String categoria;
-
+    
     @NotBlank(message = "La descripción es obligatoria")
     @Size(max = 1000, message = "La descripción no puede exceder los 1000 caracteres")
+    @Column(nullable = false)
     private String descripcion;
 
     @NotNull(message = "El precio es obligatorio")
-    @DecimalMin(value = "0.0", inclusive = false, message = "El precio debe ser mayor que 0")
-    private Double precio;
+    @DecimalMin(value = "0.01", message = "Debe ser mayor que 0")
+    @Column(nullable = false)
+    private BigDecimal precio;
+
+    @NotNull(message = "El stock no puede estar vacío")
+    @Min(value = 0, message = "El stock no puede ser negativo")
+    private Integer stock;
+
+    @NotBlank(message = "La categoría es obligatoria")
+    @Column(nullable = false)
+    private String categoria;
 
     private String imagen;
 
-    @Min(value = 0, message = "El stock no puede ser negativo")
-    private int stock;
 
     // Getters y Setters (incluyendo setId)
     public Long getId() {
@@ -61,16 +70,20 @@ public class Producto {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    
+    public BigDecimal getPrecio() {
+		return precio;
+	}
 
-    public Double getPrecio() {
-        return precio;
-    }
+	public void setPrecio(BigDecimal precio) {
+		this.precio = precio;
+	}
 
-    public void setPrecio(Double precio) {
-        this.precio = precio;
-    }
+	public void setStock(Integer stock) {
+		this.stock = stock;
+	}
 
-    public String getImagen() {
+	public String getImagen() {
         return imagen;
     }
 
@@ -78,8 +91,8 @@ public class Producto {
         this.imagen = imagen;
     }
 
-    public int getStock() {
-        return stock;
+    public Integer getStock() {
+        return stock != null ? stock : 0;
     }
 
     public void setStock(int stock) {

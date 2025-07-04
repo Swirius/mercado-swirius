@@ -51,6 +51,15 @@ public class UsuarioDetalles implements UserDetails {
         return true;
     }
 
+    // Accesores para que Thymeleaf pueda leer directamente desde #authentication.principal
+    public String getNombre() {
+        return usuario.getNombre();
+    }
+
+    public String getRol() {
+        return usuario.getRol();
+    }
+
     public Usuario getUsuario() {
         return usuario;
     }

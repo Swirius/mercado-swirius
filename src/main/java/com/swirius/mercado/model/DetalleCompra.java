@@ -1,5 +1,7 @@
 package com.swirius.mercado.model;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,7 +13,7 @@ public class DetalleCompra {
 
     private int cantidad;
 
-    private Double precioUnitario;
+    private BigDecimal precioUnitario;
 
     @ManyToOne
     @JoinColumn(name = "producto_id")
@@ -34,12 +36,12 @@ public class DetalleCompra {
         this.cantidad = cantidad;
     }
 
-    public Double getPrecioUnitario() {
+    public BigDecimal getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(Double precioUnitario) {
-        this.precioUnitario = precioUnitario;
+    public void setPrecioUnitario(BigDecimal bigDecimal) {
+        this.precioUnitario = bigDecimal;
     }
 
     public Producto getProducto() {

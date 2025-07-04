@@ -6,39 +6,29 @@
     <link rel="stylesheet" th:href="@{/css/estilo.css}">
 </head>
 <body>
-    <header>
-        <h1>Mercado Swirius</h1>
-        <nav>
-            <a th:href="@{/}">Inicio</a>
-            <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/carrito}">🛒 Ver Carrito</a>
-            <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/logout}">Logout</a>
-            <a th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/login}">Login</a>
-            <a th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/registro}">Registro</a>
-        </nav>
-    </header>
+    <!-- Navbar correctamente insertado -->
+    <div th:replace="~{fragmentos/nav :: navbar}"></div>
 
     <div class="container">
         <div th:if="${#authorization.expression('isAuthenticated()')}">
-            <p>
-                Bienvenido, <strong th:text="${#authentication.principal.nombre}">Usuario</strong>
-                | Rol: <strong th:text="${#authentication.principal.rol}">Rol</strong>
-            </p>
-
-            <a th:if="${#authentication.principal.rol == 'ADMIN'}" th:href="@{/productos/nuevo}">➕ Nuevo Producto</a>
+            <p>Bienvenido, <strong th:text="${#authentication.name}">Usuario</strong></p>
         </div>
 
         <!-- 🧠 Buscador -->
         <form th:action="@{/}" method="get">
-    		<input type="text" name="q" th:value="${q}" placeholder="Buscar por nombre..." />
-
-   			<input type="text" name="cat" th:value="${cat}" placeholder="Categoría" />
-
-    		<input type="number" name="min" th:value="${min}" step="0.01" placeholder="Precio mínimo" />
-   			<input type="number" name="max" th:value="${max}" step="0.01" placeholder="Precio máximo" />
-
-    		<button type="submit">🔍 Buscar</button>
-		</form>
-
+            <input type="text" name="q" th:value="${q}" placeholder="Buscar por nombre..." />
+            <select name="cat">
+                <option value="">Todas</option>
+                <option th:selected="${cat == 'Tecnología'}" value="Tecnología">Tecnología</option>
+                <option th:selected="${cat == 'Hogar'}" value="Hogar">Hogar</option>
+                <option th:selected="${cat == 'Moda'}" value="Moda">Moda</option>
+                <option th:selected="${cat == 'Deportes'}" value="Deportes">Deportes</option>
+                <option th:selected="${cat == 'Otros'}" value="Otros">Otros</option>
+            </select>
+            <input type="number" name="min" th:value="${min}" step="0.01" placeholder="Precio mínimo" />
+            <input type="number" name="max" th:value="${max}" step="0.01" placeholder="Precio máximo" />
+            <button type="submit">🔍 Buscar</button>
+        </form>
 
         <h2>Productos</h2>
 
@@ -54,35 +44,48 @@
 
                 <p th:text="${prod.descripcion}">Descripción</p>
                 <p><strong>$</strong><span th:text="${prod.precio}"></span></p>
-				<p><strong>Stock:</strong> <span th:text="${prod.stock}"></span></p>
-
+                <p><strong>Stock:</strong> <span th:text="${prod.stock}"></span></p>
                 <p><strong>Categoría:</strong> <span th:text="${prod.categoria}"></span></p>
-                
 
-                <div th:if="${#authentication.principal.rol == 'ADMIN'}">
+                <!-- 🔒 Admin: Editar/Eliminar -->
+                <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                     <a th:href="@{'/productos/editar/' + ${prod.id}}">✏️ Editar</a> |
                     <a th:href="@{'/productos/eliminar/' + ${prod.id}}"
                        onclick="return confirm('¿Seguro que querés eliminar este producto?')">🗑️ Eliminar</a>
-                </div>
+                </th:block>
 
+                <!-- 👤 Usuarios autenticados -->
                 <div th:if="${#authorization.expression('isAuthenticated()')}">
                     <div th:if="${prod.stock > 0}">
-                        <a th:href="@{'/carrito/agregar/' + ${prod.id}}">🛒 Agregar al carrito</a>
+                        <form th:action="@{'/carrito/agregar/' + ${prod.id}}" method="post">
+                            <label for="cantidad">Cantidad:</label>
+                            <input type="number" id="cantidad" name="cantidad" min="1"
+                                   th:attr="max=${prod.stock}" value="1" required />
+                            <button type="submit">🛒 Agregar al carrito</button>
+                        </form>
                     </div>
                     <div th:if="${prod.stock == 0}">
-                        <p style="color: red;">❌ Sin stock</p>
+                        <p style="color: red;">❌ Sin stock disponible</p>
                     </div>
                 </div>
+
                 <hr />
+            </div>
+
+            <!-- 📄 Paginación -->
+            <div th:if="${totalPages > 1}">
+                <div class="paginacion">
+                    <a th:if="${currentPage > 0}"
+                       th:href="@{/?page=${currentPage - 1}(q=${q}, cat=${cat}, min=${min}, max=${max})}">« Anterior</a>
+                    <span>Página <span th:text="${currentPage + 1}"></span> de <span th:text="${totalPages}"></span></span>
+                    <a th:if="${currentPage + 1 < totalPages}"
+                       th:href="@{/?page=${currentPage + 1}(q=${q}, cat=${cat}, min=${min}, max=${max})}">Siguiente »</a>
+                </div>
             </div>
         </div>
 
         <div th:if="${productos == null or productos.isEmpty()}">
             <p style="color: gray;">🔍 No se encontraron productos con ese criterio.</p>
-        </div>
-
-        <div th:if="${#authorization.expression('isAuthenticated()')}">
-            <a th:href="@{/historial}">📜 Mis Compras</a>
         </div>
     </div>
 </body>

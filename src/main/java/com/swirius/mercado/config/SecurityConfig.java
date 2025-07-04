@@ -6,9 +6,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     private final UsuarioService usuarioService;
@@ -22,7 +24,9 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/registro", "/css/**", "/uploads/**").permitAll()
-                .anyRequest().authenticated()
+                .requestMatchers("/productos/nuevo", "/productos/editar/**", "/productos/eliminar/**").hasRole("ADMIN")
+                .requestMatchers("/carrito/**", "/comprar", "/historial").authenticated()
+                .anyRequest().permitAll()
             )
             .formLogin(form -> form
                 .loginPage("/login")
@@ -32,8 +36,9 @@ public class SecurityConfig {
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout=true")
-                .permitAll()
+            	    .logoutUrl("/logout") // ← Usa POST por defecto
+            	    .logoutSuccessUrl("/login?logout=true")
+            	    .permitAll()
             )
             .userDetailsService(usuarioService);
 
