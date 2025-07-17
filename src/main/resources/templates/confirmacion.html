@@ -20,7 +20,7 @@
         <p>Total: <strong>$<span th:text="${compra.total}"></span></strong></p>
 
         <h3>Productos:</h3>
-        <ul>
+        <ul class="lista-productos">
             <li th:each="detalle : ${compra.detalleCompraList}">
                 <span th:text="${detalle.producto.nombre}"></span> -
                 Cantidad: <span th:text="${detalle.cantidad}"></span> -

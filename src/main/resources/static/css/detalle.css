@@ -1,0 +1,31 @@
+@charset "UTF-8";
+
+.detalle-producto {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  background-color: white;
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.imagen-producto {
+  flex: 1 1 300px;
+  max-width: 400px;
+}
+
+.img-detalle {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: contain;
+}
+
+.info-detalle-producto {
+  flex: 2 1 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

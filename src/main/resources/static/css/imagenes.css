@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.img-producto {
+  width: 100%;
+  max-width: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.img-detalle {
+  width: 100%;
+  max-width: 350px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 16px;
+}
+
+.img-mini {
+  width: 100%;
+  max-width: 150px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-bottom: 8px;
+}

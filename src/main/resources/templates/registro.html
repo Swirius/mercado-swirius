@@ -9,14 +9,13 @@
     <header>
         <h1>Registro de Usuario</h1>
         <nav>
-            <a th:href="@{/}">Inicio</a>
-            <a th:href="@{/login}">Login</a>
+            <a class="link-accion" th:href="@{/}">Inicio</a>
+            <a class="link-accion" th:href="@{/login}">Login</a>
         </nav>
     </header>
 
     <div class="container">
-        <form th:action="@{/registro}" th:object="${usuario}" method="post" novalidate>
-        
+        <form class="form-registro" th:action="@{/registro}" th:object="${usuario}" method="post">        
             <!-- Nombre -->
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" th:field="*{nombre}" placeholder="Tu nombre completo" />
@@ -33,7 +32,7 @@
 			<div th:replace="~{fragmentos/errores :: errores('password')}"></div>
 
             <!-- Botón -->
-            <button type="submit">Registrarse</button>
+            <button class="btn-primario" type="submit">Registrarse</button>
             
             <!-- Mensaje global -->
 			<div th:if="${#fields.hasGlobalErrors()}" class="error-global">

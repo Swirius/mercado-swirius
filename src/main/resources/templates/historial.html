@@ -24,7 +24,7 @@
                 <span th:text="${#dates.format(orden.fecha, 'dd/MM/yyyy HH:mm')}"></span>
             </h3>
 
-            <ul>
+            <ul class="lista-productos">
                 <li th:each="item : ${orden.detalleCompraList}">
                     <strong th:text="${item.producto.nombre}"></strong>
                     - Cantidad: <span th:text="${item.cantidad}"></span>
@@ -34,7 +34,7 @@
             </ul>
 
             <p><strong>Total:</strong> $<span th:text="${orden.total}"></span></p>
-            <hr>
+            <hr class="separador">
         </div>
     </div>
 </body>

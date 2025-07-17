@@ -10,44 +10,48 @@
         <h1>Detalle del Producto</h1>
         <nav>
             <a th:href="@{/}">🏠 Inicio</a>
-            <a th:href="@{/productos}">📦 Volver a Productos</a>
         </nav>
     </header>
 
-    <div class="container detalle-producto">
+    <div class="container">
+    <div class="detalle-producto">
+        <!-- IMAGEN -->
         <div class="imagen-producto">
-            <img th:src="@{'/uploads/' + ${producto.imagen}}" width="350" alt="Imagen del producto" />
+            <img class="img-detalle" th:src="@{'/uploads/' + ${producto.imagen}}" alt="Imagen del producto" />
         </div>
 
-        <div class="info-producto">
+        <!-- INFORMACIÓN -->
+        <div class="info-detalle-producto">
             <h2 th:text="${producto.nombre}">Nombre</h2>
             <p><strong>Descripción:</strong> <span th:text="${producto.descripcion}">Descripción</span></p>
             <p><strong>Precio:</strong> $<span th:text="${producto.precio}">0.00</span></p>
             <p><strong>Categoría:</strong> <span th:text="${producto.categoria}">Sin categoría</span></p>
             <p><strong>Stock:</strong> <span th:text="${producto.stock}">0</span></p>
 
-            <!-- Opciones solo para ADMIN -->
+            <!-- Admin -->
             <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                <a th:href="@{'/productos/editar/' + ${producto.id}}">✏️ Editar</a> |
-                <a th:href="@{'/productos/eliminar/' + ${producto.id}}"
+                <a class="admin-link" th:href="@{'/productos/editar/' + ${producto.id}}">✏️ Editar</a> |
+                <a class="admin-link" th:href="@{'/productos/eliminar/' + ${producto.id}}"
                    onclick="return confirm('¿Eliminar este producto?')">🗑️ Eliminar</a>
             </div>
 
-            <!-- Agregar al carrito si está autenticado -->
+            <!-- Agregar al carrito -->
             <div th:if="${#authorization.expression('isAuthenticated()')}">
                 <div th:if="${producto.stock > 0}">
-                    <form method="post" th:action="@{'/carrito/agregar/' + ${producto.id}}">
+                    <form class="form-agregar-carrito" method="post" th:action="@{'/carrito/agregar/' + ${producto.id}}">
                         <label for="cantidad">Cantidad:</label>
-                        <input type="number" id="cantidad" name="cantidad" min="1" 
+                        <input type="number" id="cantidad" name="cantidad" min="1"
                                th:attr="max=${producto.stock}" value="1" required />
-                        <button type="submit">🛒 Agregar al carrito</button>
+                        <button class="btn" type="submit">🛒 Agregar al carrito</button>
                     </form>
                 </div>
                 <div th:if="${producto.stock == 0}">
-                    <p style="color: red;">❌ Sin stock disponible</p>
+                    <p class="mensaje-error">❌ Sin stock disponible</p>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
 </body>
 </html>

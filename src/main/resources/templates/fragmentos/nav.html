@@ -3,25 +3,25 @@
     <header>
         <h1>Mercado Swirius</h1>
         <nav>
-            <a th:href="@{/}">🏠 Inicio</a>
+            <a class="nav-link" th:href="@{/}">🏠 Inicio</a>
 
             <!-- Solo autenticados -->
-            <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/carrito}">🛒 Carrito</a>
-            <a th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/historial}">📜 Mis Compras</a>
+            <a class="nav-link" th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/carrito}">🛒 Carrito</a>
+            <a class="nav-link" th:if="${#authorization.expression('isAuthenticated()')}" th:href="@{/historial}">📜 Mis Compras</a>
 
             <!-- Solo admin -->
-            <a th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/productos/nuevo}">➕ Nuevo Producto</a>
+            <a class="nav-link" th:if="${#authorization.expression('hasRole(''ADMIN'')')}" th:href="@{/productos/nuevo}">➕ Nuevo Producto</a>
 
             <!-- Logout como botón -->
             <form th:action="@{/logout}" method="post" th:if="${#authorization.expression('isAuthenticated()')}" style="display:inline;">
 			    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-			    <button type="submit">Logout</button>
+			    <button class="btn-secundario" type="submit">Logout</button>
 			</form>
 
 
             <!-- Si no está autenticado -->
-            <a th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/login}">🔐 Login</a>
-            <a th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/registro}">📝 Registro</a>
+            <a class="nav-link" th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/login}">🔐 Login</a>
+            <a class="nav-link" th:unless="${#authorization.expression('isAuthenticated()')}" th:href="@{/registro}">📝 Registro</a>
         </nav>
     </header>
 </div>

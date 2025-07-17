@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+.lista-productos {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 12px;
+}
+
+.lista-productos li {
+  margin-bottom: 6px;
+  padding-left: 1em;
+  position: relative;
+}
+
+.lista-productos li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #007bff;
+  font-weight: bold;
+}
+
+.separador {
+  border: none;
+  border-top: 1px solid #ccc;
+  margin: 24px 0;
+}
